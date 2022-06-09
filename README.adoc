@@ -150,6 +150,8 @@ Use Confluent CLI in the Confluent Platform package
 export PATH=$CONFLUENT_HOME/bin:$PATH``
 ----
 
+Restart the terminal for the PATH changes to take effect
+
 Confirm the version and the OS type of the CLI with the following command:
 
 ``confluent version``
