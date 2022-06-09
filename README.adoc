@@ -129,7 +129,7 @@ zookeeper         /etc/confluent/docker/run        Up      0.0.0.0:2181->2181/tc
 
 Install Confluent CLI
 
-``curl -sL --http1.1 https://cnfl.io/cli | sh -s -- latest``
+`curl -sL --http1.1 https://cnfl.io/cli | sh -s -- latest`
 
 Once the confluent CLI is downloaded, add the export path to the .zsh or bash profile depending on which terminal you are using.
 If zsh, then run `sudo vi ~/.zshrc`
