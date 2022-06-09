@@ -61,6 +61,8 @@ curl -X POST -d 'name=vik&age=33' spring-kafka-avro-sleepy-dugong.apps.sanaa.cf-
 kafka-avro-console-consumer --bootstrap-server kafka.supergloo.com:9092 --consumer.config kafka.properties --topic users --from-beginning --property schema.registry.url=http://schemaregistry.supergloo.com:8081
 ----
 
+# START FROM HERE
+
 First check the java version of your terminal by running the command
 `java --version`
 
@@ -69,8 +71,7 @@ This app uses java 11, if the java version is not 11 then change it to java11 by
 Step 1: Download and start Confluent Platform
 Download or copy the contents of the Confluent Platform all-in-one Docker Compose file, for example:
 
-``curl --silent --output docker-compose.yml \
-  https://raw.githubusercontent.com/confluentinc/cp-all-in-one/7.1.1-post/cp-all-in-one/docker-compose.yml``
+``curl --silent --output docker-compose.yml https://raw.githubusercontent.com/confluentinc/cp-all-in-one/7.1.1-post/cp-all-in-one/docker-compose.yml``
  This step should create a docker-compose.yml file in the project structure
 
 Start the Confluent Platform stack with the -d option to run in detached mode:
