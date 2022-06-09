@@ -61,4 +61,115 @@ curl -X POST -d 'name=vik&age=33' spring-kafka-avro-sleepy-dugong.apps.sanaa.cf-
 kafka-avro-console-consumer --bootstrap-server kafka.supergloo.com:9092 --consumer.config kafka.properties --topic users --from-beginning --property schema.registry.url=http://schemaregistry.supergloo.com:8081
 ----
 
+First check the java version of your terminal by running the command
+`java --version`
+
+This app uses java 11, if the java version is not 11 then change it to java11 by running the command as `j11`
+
+Step 1: Download and start Confluent Platform
+Download or copy the contents of the Confluent Platform all-in-one Docker Compose file, for example:
+
+``curl --silent --output docker-compose.yml \
+  https://raw.githubusercontent.com/confluentinc/cp-all-in-one/7.1.1-post/cp-all-in-one/docker-compose.yml``
+ This step should create a docker-compose.yml file in the project structure
+
+Start the Confluent Platform stack with the -d option to run in detached mode:
+
+``docker-compose up -d``
+
+Each Confluent Platform component starts in a separate container. Your output should resemble:
+
+``Creating network "cp-all-in-one_default" with the default driver
+Creating zookeeper ... done
+
+Creating broker    ... done
+
+Creating schema-registry ... done
+
+Creating rest-proxy      ... done
+
+Creating connect         ... done
+
+Creating ksql-datagen    ... done
+
+Creating ksqldb-server   ... done
+
+Creating control-center  ... done
+
+Creating ksqldb-cli      ... done``
+
+If you get an error as
+
+`` Error response from daemon: network 25a54a28fae3ccb7a9f7512bf4336ecc56784ef35609042efcf5609e6c9b7fe0 not found ``
+then turn off the services `docker compose down`
+and try starting the services again
+`docker-compose up -d`
+
+Verify that the services are up and running:
+
+``docker-compose ps``
+
+Your output should resemble:
+
+`Name                    Command               State                Ports
+//------------------------------------------------------------------------------------------
+`broker            /etc/confluent/docker/run        Up      0.0.0.0:29092->29092/tcp,
+                                                           0.0.0.0:9092->9092/tcp
+connect           /etc/confluent/docker/run        Up      0.0.0.0:8083->8083/tcp,
+                                                           9092/tcp
+control-center    /etc/confluent/docker/run        Up      0.0.0.0:9021->9021/tcp
+ksqldb-cli        /bin/sh                          Up
+ksql-datagen      bash -c echo Waiting for K ...   Up
+ksqldb-server     /etc/confluent/docker/run        Up      0.0.0.0:8088->8088/tcp
+rest-proxy        /etc/confluent/docker/run        Up      0.0.0.0:8082->8082/tcp
+schema-registry   /etc/confluent/docker/run        Up      0.0.0.0:8081->8081/tcp
+zookeeper         /etc/confluent/docker/run        Up      0.0.0.0:2181->2181/tcp,
+                                                           2888/tcp, 3888/tcp`
+
+Install Confluent CLI
+
+``curl -sL --http1.1 https://cnfl.io/cli | sh -s -- latest``
+
+Once the confluent CLI is downloaded, add the export path to the .zsh or bash profile depending on which terminal you are using.
+If zsh, then run `sudo vi ~/.zshrc`
+and in the export path add the path by appending : at the end
+
+`/Users/surbhi.verma/springboot-kafka-avro/bin` -> pwd/bin
+So the export path looks as below :
+
+`export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/surbhi.verma/springboot-kafka-avro/bin`
+
+optional
+----
+Use Confluent CLI in the Confluent Platform package
+
+``export CONFLUENT_HOME=./bin
+export PATH=$CONFLUENT_HOME/bin:$PATH``
+----
+
+Confirm the version and the OS type of the CLI with the following command:
+
+``confluent version``
+
+To build the app run
+`./mvnw clean package`
+
+Once the build is successful, then run the application `SpringAvroApplication`
+
+then try sending the message on to the kafka topic using
+
+`curl -X POST -d 'name=vik&age=33' http://localhost:9080/user/publish`
+
+Output:
+Produced user -> {"name": "vik", "age": 33}
+Consumed message -> {"name": "vik", "age": 33}
+
+and you can see the output in the console (Run tab) where the app is running
+ -----------
+If incase you get timeout error, run `docker-compose down` and then `docker-compose up -d`
+
+Then rebuild the project by running `./mvnw clean package`
+
+If you get an error - `zsh: permission denied: ./mvnw`
+`chmod +x mvnw`
 
